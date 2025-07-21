@@ -37,3 +37,7 @@ npm run dev
 - [MonacoEditor](https://www.npmjs.com/package/@monaco-editor/react)
 - [Nextjs](https://nextjs.org/)
 - [Dagre](https://github.com/dagrejs/dagre)
+
+## License
+
+[MIT](https://github.com/mdauthentic/uml-tools/blob/main/LICENSE)
