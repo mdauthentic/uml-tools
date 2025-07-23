@@ -31,13 +31,28 @@ const DiagramCanvas = ({
 }: Props) => {
   const flowWrapper = useRef<HTMLDivElement>(null);
 
+  const [isExporting, setIsExporting] = React.useState(false);
+
   const downloadAsPng = async () => {
     if (!flowWrapper.current) return;
-    const dataUrl = await toPng(flowWrapper.current);
+    setIsExporting(true);
+
+    // allow DOM to update (remove background/buttons)
+    await new Promise((r) => setTimeout(r, 0));
+
+    const dataUrl = await toPng(flowWrapper.current, {
+      filter: (node) => {
+        // skip elements with 'exclude-from-export' class
+        const className = (node as HTMLElement).className || "";
+        return !className.toString().includes("exclude-from-export");
+      },
+    });
+
     const link = document.createElement("a");
     link.download = "diagram.png";
     link.href = dataUrl;
     link.click();
+    setIsExporting(false);
   };
 
   const downloadAsSvg = async () => {
@@ -86,7 +101,13 @@ const DiagramCanvas = ({
         </div>
       </div>
 
-      <div ref={flowWrapper} className="h-[calc(100%-2rem)] w-full">
+      <div
+        ref={flowWrapper}
+        className="h-[calc(100%-2rem)] w-full"
+        style={{
+          backgroundColor: isExporting ? "#ffffff" : "transparent",
+        }}
+      >
         <ReactFlow
           nodes={nodes}
           edges={edges}
@@ -96,8 +117,17 @@ const DiagramCanvas = ({
           fitView
           fitViewOptions={{ padding: 1 }}
         >
-          <Background variant={BackgroundVariant.Dots} gap={20} size={1} />
-          <Controls />
+          {!isExporting && (
+            <>
+              <Background
+                className="exclude-from-export"
+                variant={BackgroundVariant.Dots}
+                gap={20}
+                size={1}
+              />
+              <Controls className="exclude-from-export" />
+            </>
+          )}
         </ReactFlow>
       </div>
     </div>

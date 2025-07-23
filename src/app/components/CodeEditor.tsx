@@ -12,7 +12,7 @@ const CodeEditor = ({ code, setCode }: Props) => {
   useMonacoSetup();
 
   return (
-    <div className="h-full w-4/12 border-r">
+    <div className="h-full w-4/12">
       <Editor
         width="100%"
         height="100%"
