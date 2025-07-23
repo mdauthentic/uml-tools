@@ -27,7 +27,7 @@ const ItemList = ({
       <EmptyState text={emptyText} />
     ) : (
       items.map((item, i) => (
-        <div key={i} className="text-accent py-0.5">
+        <div key={i} className="py-0.5 text-accent">
           {item}
         </div>
       ))
@@ -39,7 +39,6 @@ function UMLClassNode({ data }: UMLClassNodeProps) {
   const lines = data.label.split("\n");
   const [className, ...contentLines] = lines;
 
-  // Single pass through content lines to separate attributes and methods
   const { attributes, methods } = contentLines.reduce(
     (acc, line) => {
       if (line.includes("(")) {
@@ -54,12 +53,12 @@ function UMLClassNode({ data }: UMLClassNodeProps) {
 
   return (
     <div className="min-w-[140px] font-mono">
-      <div className="border-secondary bg-primary text-accent relative rounded-t-sm border-[0.7px] px-1.5 py-0.5 text-xs font-medium">
+      <div className="relative rounded-t-sm border-[0.7px] border-secondary bg-primary px-1.5 py-0.5 text-xs font-medium text-accent">
         {className}
       </div>
 
-      <div className="border-secondary flex flex-col rounded-b-sm border-x-[0.7px] border-b-[0.5px]">
-        <div className="border-b-secondary border-b-[0.7px] px-2 py-1 text-xs">
+      <div className="flex flex-col rounded-b-sm border-x-[0.7px] border-b-[0.5px] border-secondary">
+        <div className="border-b-[0.7px] border-b-secondary px-2 py-1 text-xs">
           <ItemList items={attributes} emptyText="No attributes" />
         </div>
 

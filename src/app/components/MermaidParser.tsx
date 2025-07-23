@@ -11,11 +11,30 @@ interface NodeData {
 }
 
 // Constants
-const RELATIONS = ["<|--", "--|>", "*--", "o--", "--"] as const;
+const RELATIONS = [
+  "<|--",
+  "--|>",
+  "*--",
+  "o--",
+  "--",
+  "<..",
+  "..>",
+  "<--",
+  "-->",
+  "<|..",
+  "..",
+] as const;
 
-const EDGE_STYLE = {
-  stroke: "#a9b2bc",
-  strokeWidth: 1.5,
+const EDGE_STYLES = {
+  EDGE: {
+    stroke: "#101828cc",
+    strokeWidth: 1,
+  },
+  EDGE_DASHED: {
+    stroke: "#101828cc",
+    strokeWidth: 1,
+    strokeDasharray: "6 4",
+  },
 } as const;
 
 const MARKER_CONFIG = {
@@ -57,13 +76,15 @@ function createEdge(
   relation: string,
   label = "",
 ): Edge {
+  const isDashed = relation.includes("..");
+  const style = isDashed ? EDGE_STYLES.EDGE_DASHED : EDGE_STYLES.EDGE;
   return {
     id: `${from}-${to}-${relation}`,
     source: from,
     target: to,
     type: "step",
     label,
-    style: EDGE_STYLE,
+    style,
     markerEnd: MARKER_CONFIG,
   };
 }
